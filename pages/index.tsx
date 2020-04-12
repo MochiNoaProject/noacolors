@@ -4,15 +4,19 @@ import React, { useCallback, useRef, useState } from "react"
 
 const Legend: React.FC<{ color: string }> = ({ color, children }) => {
     const ref = useRef<HTMLInputElement>(null)
+    const timer = useRef(0)
     const [copied, setCopied] = useState(false)
     const handleClick = useCallback(() => {
         if (ref && ref.current) {
             ref.current.select()
             ref.current.setSelectionRange(0, 99999)
         }
+        window.clearInterval(timer.current)
+
         document.execCommand("copy")
         setCopied(true)
-        window.setInterval(() => {
+
+        timer.current = window.setInterval(() => {
             setCopied(false)
         }, 1000)
     }, [])
