@@ -20,20 +20,24 @@ const Legend: React.FC<{ color: string }> = ({ color, children }) => {
         <div
             onClick={handleClick}
             css={css`
-                background-color: ${color};
-                width: 100px;
-                height: 100px;
                 display: flex;
                 align-items: center;
                 justify-content: center;
+                width: 100px;
+                height: 100px;
+                color: ${Color(color).isLight() ? "#424242" : "#EDEDED"};
                 cursor: pointer;
-                transition: 0.3s;
+                background-color: ${color};
+                border-radius: 50%;
                 box-shadow: 0px 1px 8px 0px rgba(0, 0, 0, 0.2), 0px 3px 4px 0px rgba(0, 0, 0, 0.14),
                     0px 3px 3px -2px rgba(0, 0, 0, 0.12);
-                border-radius: 50%;
-                color: ${Color(color).isLight() ? "#424242" : "#EDEDED"};
+
+                transition: 0.3s;
+
                 & input {
-                    display: none;
+                    position: absolute;
+                    z-index: -1;
+                    opacity: 0;
                 }
                 &:hover {
                     box-shadow: 0px 4px 5px -2px rgba(0, 0, 0, 0.2), 0px 7px 10px 1px rgba(0, 0, 0, 0.14),
@@ -41,7 +45,7 @@ const Legend: React.FC<{ color: string }> = ({ color, children }) => {
                 }
             `}
         >
-            <input type="text" defaultValue={color} ref={ref} />
+            <input type="text" value={color} ref={ref} readOnly />
             {copied ? "Copied!" : children}
         </div>
     )
@@ -51,8 +55,8 @@ const Column: React.FC = ({ children }) => {
     return (
         <div
             css={css`
-                padding: 20px;
                 max-width: 800px;
+                padding: 20px;
                 margin: auto;
             `}
         >
@@ -78,7 +82,7 @@ const Row: React.FC = ({ children }) => {
     )
 }
 
-const IndexPage: React.FC = props => {
+const IndexPage: React.FC = () => {
     return (
         <Column>
             <p>テーマ</p>
