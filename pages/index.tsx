@@ -1,28 +1,14 @@
 import { css } from "@emotion/core"
+import { useCopyClipboard } from "../hooks/useCopyClipboard"
 import Color from "color"
-import React, { useCallback, useRef, useState } from "react"
+import React, { useRef } from "react"
 
 const Legend: React.FC<{ color: string }> = ({ color, children }) => {
     const ref = useRef<HTMLInputElement>(null)
-    const timer = useRef(0)
-    const [copied, setCopied] = useState(false)
-    const handleClick = useCallback(() => {
-        if (ref && ref.current) {
-            ref.current.select()
-            ref.current.setSelectionRange(0, 99999)
-        }
-        window.clearInterval(timer.current)
-
-        document.execCommand("copy")
-        setCopied(true)
-
-        timer.current = window.setInterval(() => {
-            setCopied(false)
-        }, 1000)
-    }, [])
+    const [isCopied, setCopied] = useCopyClipboard(color, { successDuration: 1000 })
     return (
         <div
-            onClick={handleClick}
+            onClick={setCopied}
             css={css`
                 display: flex;
                 align-items: center;
@@ -31,6 +17,7 @@ const Legend: React.FC<{ color: string }> = ({ color, children }) => {
                 height: 100px;
                 color: ${Color(color).isLight() ? "#424242" : "#EDEDED"};
                 cursor: pointer;
+                user-select: none;
                 background-color: ${color};
                 border-radius: 50%;
                 box-shadow: 0px 1px 8px 0px rgba(0, 0, 0, 0.2), 0px 3px 4px 0px rgba(0, 0, 0, 0.14),
@@ -50,7 +37,7 @@ const Legend: React.FC<{ color: string }> = ({ color, children }) => {
             `}
         >
             <input type="text" value={color} ref={ref} readOnly />
-            {copied ? "Copied!" : children}
+            {isCopied ? "Copied!" : children}
         </div>
     )
 }
