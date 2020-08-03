@@ -7,38 +7,52 @@ const Legend: React.FC<{ color: string }> = ({ color, children }) => {
     const ref = useRef<HTMLInputElement>(null)
     const [isCopied, setCopied] = useCopyClipboard(color, { successDuration: 1000 })
     return (
-        <div
-            onClick={setCopied}
+        <fieldset
             css={css`
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                width: 100px;
-                height: 100px;
-                color: ${Color(color).isLight() ? "#424242" : "#EDEDED"};
-                cursor: pointer;
-                user-select: none;
-                background-color: ${color};
-                border-radius: 50%;
-                box-shadow: 0px 1px 8px 0px rgba(0, 0, 0, 0.2), 0px 3px 4px 0px rgba(0, 0, 0, 0.14),
-                    0px 3px 3px -2px rgba(0, 0, 0, 0.12);
-
-                transition: 0.3s;
-
-                & input {
-                    position: absolute;
-                    z-index: -1;
-                    opacity: 0;
-                }
-                &:hover {
-                    box-shadow: 0px 4px 5px -2px rgba(0, 0, 0, 0.2), 0px 7px 10px 1px rgba(0, 0, 0, 0.14),
-                        0px 2px 16px 1px rgba(0, 0, 0, 0.12);
-                }
+                text-align: center;
+                border: none;
             `}
         >
-            <input type="text" value={color} ref={ref} readOnly />
-            {isCopied ? "Copied!" : children}
-        </div>
+            <div
+                onClick={setCopied}
+                css={css`
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: 100px;
+                    height: 100px;
+                    color: ${Color(color).isLight() ? "#424242" : "#EDEDED"};
+                    cursor: pointer;
+                    user-select: none;
+                    background-color: ${color};
+                    border-radius: 50%;
+                    box-shadow: 0px 1px 8px 0px rgba(0, 0, 0, 0.2), 0px 3px 4px 0px rgba(0, 0, 0, 0.14),
+                        0px 3px 3px -2px rgba(0, 0, 0, 0.12);
+
+                    transition: 0.3s;
+
+                    & input {
+                        position: absolute;
+                        z-index: -1;
+                        opacity: 0;
+                    }
+                    &:hover {
+                        box-shadow: 0px 4px 5px -2px rgba(0, 0, 0, 0.2), 0px 7px 10px 1px rgba(0, 0, 0, 0.14),
+                            0px 2px 16px 1px rgba(0, 0, 0, 0.12);
+                    }
+                `}
+            >
+                <input type="text" value={color} ref={ref} readOnly />
+                {isCopied ? "Copied!" : children}
+            </div>
+            <label
+                css={css`
+                    font-size: 10px;
+                `}
+            >
+                {Color(color).toString()}
+            </label>
+        </fieldset>
     )
 }
 
